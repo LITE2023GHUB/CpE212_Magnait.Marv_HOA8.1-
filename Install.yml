@@ -1,0 +1,56 @@
+---
+- hosts: all
+  become: true
+  pre_tasks:
+
+  - name: Update repository Index (CentOS)
+    tags: always
+    dnf:
+      update_cache: yes
+    changed_when: false
+    when: ansible_distribution == "CentOS"
+
+  - name: Update repository Index (Ubuntu)
+    tags: always
+    apt:
+      update_cache: yes
+    changed_when: false
+    when: ansible_distribution == "Ubuntu"
+
+- hosts: Ubuntu
+  become: true
+  roles:
+    -  Ubuntu
+
+- hosts: CentOS
+  become: true
+  roles:
+    -  CentOS
+
+
+  - name: Install Nagios on Ubuntu and CentOS
+    hosts: all
+    become: true
+    roles:
+      -  Ubuntu
+      -  CentOS
+
+  - name: Ensured required packages
+    package: 
+      name:
+        - gcc
+        - make
+        - wget
+    state: present
+
+  - name: Create Nagios User
+    user:
+      name: nagios1
+      shell: /bin/bash
+      system: yes
+      create_home: yes
+
+  - name: Create nagios group
+    group:
+      name: nagios_group1
+      system: yes
