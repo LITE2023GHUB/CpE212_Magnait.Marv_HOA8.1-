@@ -13,10 +13,8 @@
     state: present
 
 - name: Start and enable Nagios
-  systemd: 
+  systemd:
     name: nagios
     state: started
     enabled: yes
-
-
 

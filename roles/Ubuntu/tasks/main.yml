@@ -14,3 +14,15 @@
     state: started
     enabled: yes
 
+- name: Start and enable Nagios on Ubuntu
+  systemd:
+    name: nagios3
+    state: started
+    enabled: yes
+
+- name: Enable and start Apache/Httpd service on CentOS
+  service:
+    name: apache2
+    enabled: yes
+    state: started
+  when: ansible_distribution == "Ubuntu"
